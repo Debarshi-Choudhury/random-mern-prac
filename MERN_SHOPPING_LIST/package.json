@@ -1,0 +1,13 @@
+{
+  "name": "mern_shopping_list",
+  "version": "1.0.0",
+  "description": "shopping list built with mern stack",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node server.js",
+    "server":"nodemon server.js"
+  },
+  "author": "debarshi",
+  "license": "MIT"
+}

@@ -14,7 +14,7 @@ router.get('/logout',(req,res)=>{
 	res.redirect('/');
 });
 
-//auth with gogle
+//auth with google
 router.get('/google',passport.authenticate('google',{
 	scope:['profile','email']
 }));
@@ -25,5 +25,20 @@ router.get('/google/redirect',passport.authenticate('google'),(req,res)=>{
 	// res.send(req.user);
 	res.redirect('/profile/');
 });
+
+
+//auth with facebook
+router.get('/facebook',
+	passport.authenticate('facebook',{ scope : ['email'] })
+);
+
+
+//callback route for facebook to redirect to 
+router.get('/facebook/redirect',
+	passport.authenticate('facebook', { failureRedirect: '/login' }),(req, res)=>{
+	// console.log('you reached the facebook callback uri');
+	res.redirect('/profile/');
+});
+
 
 module.exports = router;
