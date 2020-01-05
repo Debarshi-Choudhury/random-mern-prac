@@ -6,8 +6,22 @@ const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+
+
+
+
+//ssl certificate options
+let certOptions = {
+  key: fs.readFileSync(path.resolve('config/server.key')),
+  cert: fs.readFileSync(path.resolve('config/server.crt'))
+}
+
 
 const app = express();
+
 
 //set up view engine
 app.set('view engine','ejs');
@@ -35,6 +49,8 @@ app.get('/',(req,res)=>{
 	res.render('home',{user:req.user});
 })
 
-app.listen(3500,()=>{
+
+
+let server = https.createServer(certOptions, app).listen(3500, ()=>{
 	console.log('listening for request on port 3500');
 });

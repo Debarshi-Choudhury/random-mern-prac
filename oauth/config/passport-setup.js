@@ -99,12 +99,22 @@ passport.use(new FacebookStrategy({
 				emailExists = true;
 		}
 
-
+		let name = "";
+		if(profile.name){
+			if(profile.name.givenName)
+				name = name+profile.name.givenName+" ";
+			if(profile.name.familyName)
+				name = name+profile.name.familyName;
+		}
 
 		User.findOne({accountId: profile.id, provider: 'facebook'}).then((result)=>{
 			if(result){
 				if(!result.email || result.email == 'temporary_email'){
 					result.email = (emailExists?profile._json.email:'temporary_email');
+
+				}
+				if(!result.userName){
+					result.userName = (profile.displayName ? profile.displayName: name);
 
 				}
 				if(!result.gender){
@@ -121,9 +131,9 @@ passport.use(new FacebookStrategy({
 				});
 			}else{
 				new User({
-					userName: profile.displayName,
+					userName: (profile.displayName ? profile.displayName: name),
 					email: (emailExists?profile._json.email:'temporary_email'),
-					thumbnail: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
+					thumbnail: (profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg'),
 					gender: profile.gender,
 					accountId: profile.id,
 					provider: 'facebook'
